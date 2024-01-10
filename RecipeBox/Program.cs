@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Library.Models;
+using RecipeBox.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Library
+namespace RecipeBox
 {
   class Program
   {
@@ -14,14 +14,14 @@ namespace Library
 
       builder.Services.AddControllersWithViews();
 
-      builder.Services.AddDbContext<LibraryContext>(
+      builder.Services.AddDbContext<RecipeBoxContext>(
         DbContextOptions => DbContextOptions.UseMySql(
           builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"])
           )
       );
 
       builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-          .AddEntityFrameworkStores<LibraryContext>()
+          .AddEntityFrameworkStores<RecipeBoxContext>()
           .AddDefaultTokenProviders();
 
       builder.Services.Configure<IdentityOptions>(options => 
