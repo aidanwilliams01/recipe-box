@@ -23,15 +23,20 @@ namespace RecipeBox.Controllers
       _db = db;
     }
 
-    public async Task<ActionResult> Index()
+    // public async Task<ActionResult> Index()
+    // {
+    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //   List<Recipe> userRecipes = _db.Recipes
+    //                       .Where(entry => entry.User.Id == currentUser.Id)
+    //                       // .OrderBy(recipe => recipe.DueDate)
+    //                       .ToList();
+    //   return View(userRecipes);
+    // }
+
+    public ActionResult Index()
     {
-      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      List<Recipe> userRecipes = _db.Recipes
-                          .Where(entry => entry.User.Id == currentUser.Id)
-                          // .OrderBy(recipe => recipe.DueDate)
-                          .ToList();
-      return View(userRecipes);
+      return View(_db.Recipes.ToList());
     }
 
     public ActionResult Create()
@@ -99,7 +104,7 @@ namespace RecipeBox.Controllers
     public ActionResult AddTag(int id)
     {
       Recipe thisRecipe = _db.Recipes.FirstOrDefault(recipes => recipes.RecipeId == id);
-      ViewBag.TagId = new SelectList(_db.Tags, "TagId", "Title");
+      ViewBag.TagId = new SelectList(_db.Tags, "TagId", "Name");
       return View(thisRecipe);
     }
 

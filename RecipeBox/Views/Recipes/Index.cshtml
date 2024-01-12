@@ -1,0 +1,17 @@
+@{
+  Layout = "_Layout";
+}
+
+@using RecipeBox.Models;
+
+<h1>Recipes for @User.Identity.Name</h1>
+
+<ul>
+  @foreach(Recipe recipe in Model)
+  {
+    <li>@Html.ActionLink($"{recipe.Title}", "Details", new {id = recipe.RecipeId})</li>
+  }
+</ul>
+
+<p>@Html.ActionLink("Add new recipe", "Create")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
