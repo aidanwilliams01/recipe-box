@@ -9,9 +9,11 @@
 <ul>
   @foreach(Recipe recipe in Model)
   {
-    <li>@Html.ActionLink($"{recipe.Title}", "Details", new {id = recipe.RecipeId})</li>
+    <li>@Html.ActionLink($"{recipe.Title}", "Details", new {id = recipe.RecipeId}) | @recipe.Rating/10</li>
   }
 </ul>
 
+<p>@Html.ActionLink("Sort by rating", "Index", new { sortOrder = "rating" })</p>
+<p>@Html.ActionLink("Sort by time added", "Index")</p>
 <p>@Html.ActionLink("Add new recipe", "Create")</p>
 <p>@Html.ActionLink("Home", "Index", "Home")</p>

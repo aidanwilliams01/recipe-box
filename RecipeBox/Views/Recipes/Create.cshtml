@@ -17,6 +17,8 @@
   @Html.LabelFor(model => model.Instructions)
   @Html.TextBoxFor(model => model.Instructions)
   <br>
+  @Html.LabelFor(model => model.Rating)
+  @Html.TextBoxFor(model => model.Rating, new { type = "number", min = "1", max = "10", step = "1", placeholder = "1-10" })
   <input type="submit" value="Add new recipe"/>
 }
 <p>@Html.ActionLink("Show all recipes", "Index")</p>

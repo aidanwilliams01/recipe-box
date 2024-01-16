@@ -34,9 +34,16 @@ namespace RecipeBox.Controllers
     //   return View(userRecipes);
     // }
 
-    public ActionResult Index()
+    public ActionResult Index(string sortOrder)
     {
-      return View(_db.Recipes.ToList());
+      if (sortOrder == "rating")
+      {
+        return View(_db.Recipes.OrderByDescending(recipe => recipe.Rating).ToList());
+      }
+      else
+      {
+        return View(_db.Recipes.ToList());
+      }
     }
 
     public ActionResult Create()
