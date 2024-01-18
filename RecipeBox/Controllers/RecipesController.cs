@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace RecipeBox.Controllers
 {
-  // [Authorize]
+  [Authorize]
   public class RecipesController : Controller
   {
     private readonly RecipeBoxContext _db;
@@ -24,47 +24,36 @@ namespace RecipeBox.Controllers
       _db = db;
     }
 
-    // public async Task<ActionResult> Index()
-    // {
-    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-    //   List<Recipe> userRecipes = _db.Recipes
-    //                       .Where(entry => entry.User.Id == currentUser.Id)
-    //                       // .OrderBy(recipe => recipe.DueDate)
-    //                       .ToList();
-    //   return View(userRecipes);
-    // } 
-
-    public ActionResult Index(string sortOrder, string searchString)
+    public async Task<ActionResult> Index(string sortOrder, string searchString)
     {
-    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-    //   userRecipes = _db.Recipes.Where(entry => entry.User.Id == currentUser.Id)  
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      var userRecipes = _db.Recipes.Where(entry => entry.User.Id == currentUser.Id);  
       if (!String.IsNullOrEmpty(searchString))
       {
         if (sortOrder == "rating")
         {
-          return View(_db.Recipes
+          return View(userRecipes
                               .Where(recipe => recipe.Ingredients!.Contains(searchString))
                               .OrderByDescending(recipe => recipe.Rating)
                               .ToList());
         }
         else
         {
-          return View(_db.Recipes
+          return View(userRecipes
                                 .Where(recipe => recipe.Ingredients!.Contains(searchString))
                                 .ToList());
         }
       }
       else if (sortOrder == "rating")
       {
-        return View(_db.Recipes
+        return View(userRecipes
                               .OrderByDescending(recipe => recipe.Rating)
                               .ToList());
       }
       else
       {
-        return View(_db.Recipes.ToList());
+        return View(userRecipes.ToList());
       }
     }
 
@@ -94,7 +83,6 @@ namespace RecipeBox.Controllers
     public ActionResult Details(int id)
     {
       Recipe thisRecipe = _db.Recipes
-                          // .Include(recipe => recipe.Category)
                           .Include(recipe => recipe.JoinEntities)
                           .ThenInclude(join => join.Tag)
                           .FirstOrDefault(recipe => recipe.RecipeId == id);
