@@ -6,6 +6,14 @@
 
 <h1>Recipes for @User.Identity.Name</h1>
 
+@using (Html.BeginForm())
+{
+<p>
+    Ingredient: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" />
+</p>
+}
+
 <ul>
   @foreach(Recipe recipe in Model)
   {

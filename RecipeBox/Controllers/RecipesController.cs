@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,34 @@ namespace RecipeBox.Controllers
     //                       // .OrderBy(recipe => recipe.DueDate)
     //                       .ToList();
     //   return View(userRecipes);
-    // }
+    // } 
 
-    public ActionResult Index(string sortOrder)
+    public ActionResult Index(string sortOrder, string searchString)
     {
-      if (sortOrder == "rating")
+    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //   userRecipes = _db.Recipes.Where(entry => entry.User.Id == currentUser.Id)  
+      if (!String.IsNullOrEmpty(searchString))
       {
-        return View(_db.Recipes.OrderByDescending(recipe => recipe.Rating).ToList());
+        if (sortOrder == "rating")
+        {
+          return View(_db.Recipes
+                              .Where(recipe => recipe.Ingredients!.Contains(searchString))
+                              .OrderByDescending(recipe => recipe.Rating)
+                              .ToList());
+        }
+        else
+        {
+          return View(_db.Recipes
+                                .Where(recipe => recipe.Ingredients!.Contains(searchString))
+                                .ToList());
+        }
+      }
+      else if (sortOrder == "rating")
+      {
+        return View(_db.Recipes
+                              .OrderByDescending(recipe => recipe.Rating)
+                              .ToList());
       }
       else
       {
