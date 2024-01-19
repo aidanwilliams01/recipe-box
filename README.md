@@ -1,6 +1,4 @@
-# (Application Name)
-
-#### (Brief description of application)
+# Recipe Box
 
 #### By Aidan Williams
 
@@ -10,6 +8,8 @@
 * _.NET_
 
 ## Description
+
+A website where users can keep track of their recipes.
 
 ## Setup Instructions
 
