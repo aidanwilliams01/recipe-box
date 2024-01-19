@@ -1,24 +1,35 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using RecipeBox.Models;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace RecipeBox.Controllers
 {
+  [Authorize]
   public class TagsController : Controller
   {
     private readonly RecipeBoxContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public TagsController(RecipeBoxContext db)
+    public TagsController(UserManager<ApplicationUser> userManager, RecipeBoxContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
 
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
-      return View(_db.Tags.ToList());
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      var userTags = _db.Tags.Where(entry => entry.User.Id == currentUser.Id);
+      return View(userTags.ToList());
     }
 
     public ActionResult Details(int id)

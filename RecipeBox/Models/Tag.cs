@@ -7,5 +7,6 @@ namespace RecipeBox.Models
     public string Name { get; set; }
     public int TagId { get; set; }
     public List<RecipeTag> JoinEntities { get; }
+    public ApplicationUser User { get; set; }
   }
 }
