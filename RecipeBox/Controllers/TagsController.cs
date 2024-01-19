@@ -64,10 +64,12 @@ namespace RecipeBox.Controllers
       }
     }
 
-    public ActionResult AddRecipe(int id)
+    public async Task<ActionResult> AddRecipe(int id)
     {
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       Tag thisTag = _db.Tags.FirstOrDefault(tags => tags.TagId == id);
-      ViewBag.RecipeId = new SelectList(_db.Recipes, "RecipeId", "Title");
+      ViewBag.RecipeId = new SelectList(_db.Recipes.Where(entry => entry.User.Id == currentUser.Id), "RecipeId", "Title");
       return View(thisTag);
     }
 
